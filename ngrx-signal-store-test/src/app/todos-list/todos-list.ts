@@ -19,12 +19,14 @@ import { TodosStore } from '../store/todos.store';
     MatButtonToggle,
     MatSelectionList,
     MatListOption
-],
+  ],
   templateUrl: './todos-list.html',
   styleUrl: './todos-list.scss',
 })
 export class TodosList {
-
   public store = inject(TodosStore);
 
+  async onAddTodo(title: string) {
+    await this.store.addTodo(title);
+  }
 }

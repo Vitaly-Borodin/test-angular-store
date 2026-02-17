@@ -18,17 +18,28 @@ const initialState: TodosState = {
 }
 
 export const TodosStore = signalStore(
-  {providedIn: 'root'},
+  { providedIn: 'root' },
   withState(initialState),
   withMethods(
 
     (store, todosService = inject(TodosService)) => ({
       async loadAll() {
-        patchState(store, {loading: true});
-
+        patchState(store, { loading: true });
         const todos = await todosService.getTodos();
+        patchState(store, { todos, loading: false })
+      },
 
-        patchState(store, {todos, loading: false})
+      async addTodo(title: string) {
+        const todo = {
+          title: title,
+          completed: false
+        } as Todo;
+
+        const savedTodo = await todosService.addTodo(todo);
+
+        patchState(store, (store) => ({
+          todos: [...store.todos, savedTodo]
+        }))
 
       }
 
